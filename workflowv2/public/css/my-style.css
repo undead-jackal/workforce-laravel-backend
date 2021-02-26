@@ -1,0 +1,326 @@
+.job_div:hover{
+    text-decoration: none;
+}
+
+.require{
+    color: #ef9a9a;
+}
+
+.job_div{
+    padding: 0px!important;
+}
+
+.success_div{
+    color: green;
+    font-size: 7rem;
+}
+.success_div div{
+    text-align: center;
+}
+
+.main-title{
+    color: #fff!important;
+    font-size: 5rem;
+    text-align: center;
+}
+.home-page .card{
+    padding: 0px;
+}
+
+/* register UI*/
+.custom-input{
+    border-bottom: 3px solid #4B70DD !important;
+    outline: 0px !important;
+}
+
+.floating-btn{
+    position:fixed;
+    width: 120px;
+    height: 70px;
+    z-index: 5;
+    bottom: 0px;
+    right: 0px;
+}
+
+.chat-box{
+    min-height: 400px;
+}
+
+.chat-box .card-body{
+    max-height: 400px;
+    overflow: auto;
+}
+
+.my-chat{
+    text-align: right;
+}
+.my-chat .chat-m{
+    display: flex;
+}
+.my-chat .chat-m p{
+    margin-left: auto;
+    background-color: #385ECE;
+    color:#fff;
+    border-radius: 20rem;
+    text-align: left;
+    padding: 2%;
+}
+
+.your-chat{
+    text-align: left;
+}
+.your-chat .chat-m{
+    display: flex;
+}
+.your-chat .chat-m p{
+    text-align: left;
+    margin-right: auto;
+    padding: 2%;
+    background-color: #385ECE;
+    color:#fff;
+    border-radius: 20rem;
+}
+
+
+/* Invite  Freelancer Page */
+/* .invites_holder .card{
+    padding:0px
+}
+
+.invites_holder .card .card-body p{
+    display: -webkit-box;   
+    -webkit-line-clamp: 4;   
+    -webkit-box-orient: vertical;   
+    overflow: hidden; ;
+} */
+
+/* .btn-invite-primary{
+    background:#3960CF!important;
+    color:#ffffff!important;
+} */
+
+/* JOb Single Page */
+/* .jobSingle .card {
+    padding: 0px;
+} */
+/* forms */
+
+.error_input{
+    border-bottom: 2px #f44336 solid!important;
+    background: #ef9a9a!important;
+}
+.error_msg{
+    color: #f44336;
+}
+
+
+
+
+/* New Profile */
+/* .profile-register{
+    min-height: 400px;
+    margin-top: 10%;
+}
+
+.first_row{
+    padding: 4%;
+    border-bottom: 1px ridge #242424;
+}
+
+.image-holder{
+    display: flex;
+    position: relative;
+}
+
+.image-holder .image{
+    background-color: red;
+    height: 120px;
+    width: 120px;
+    position: relative;
+    border-radius: 50%;
+}
+
+.image-holder .title-holder{
+    padding: 5%;
+}
+
+.gov-ids div h6{
+    display: inline-flex;
+}
+
+
+.second_row{
+    min-height: 200px;
+}
+
+.second_row .details{
+    border-bottom: 1px ridge #242424;
+}
+
+.second_row .work-history{
+    border-bottom: 1px ridge #242424;
+}
+
+.side-info{
+    border-right: 1px ridge #242424;
+}
+
+.skills span {
+    font-size: 1rem;
+}
+
+.edit-btn{
+    height: 30px;
+    width: 30px;
+    font-size: 1.2rem!important;
+    border-radius: 100px!important;
+    padding: 0% 1%!important;
+    border: 1px ridge #9c9c9c!important;
+    background-color: #ffff!important;
+}
+
+.gov-btn{
+    position: absolute;
+    right: -25px;
+}
+
+.pos-btn{
+    position: absolute;
+    right: 28px;
+    top: 20px;
+}
+
+.second_row div{
+    position: relative; */
+/* } */
+
+/* Employers Card  */
+
+/* .createJob{
+    padding: 10%;
+}
+
+.createJob .second_row,.createJob .third_row,.createJob .fourth_row{
+    position: relative;
+    padding: 3%;
+}
+
+
+.createJob .third_row span {
+    font-size: 1rem;
+}
+
+.createJob .edit-btn{
+    position: absolute;
+    right: 20px;
+    top: 10px;
+} */
+
+/* #interview{
+    display: none;
+}
+
+#interview .profile{
+    display: flex;
+}
+
+#interview .profile .image-holder{
+    width: 120px;
+}
+#interview .profile .image{
+    margin: 5% 5%;
+    height: 57px;
+    width: 60px;
+    background: red;
+    border-radius: 100%;
+}
+
+#interview .profile .text{
+    width: 220px;
+}
+
+#applicant{
+    padding: 5%;
+}
+
+#applicant .profile{
+    display: flex;
+}
+
+#applicant .profile .image-holder{
+    width: 120px;
+}
+#applicant .profile .image{
+    margin: 5% 5%;
+    height: 57px;
+    width: 60px;
+    background: red;
+    border-radius: 100%;
+}
+
+#applicant .profile .text{
+    width: 220px;
+}
+
+.modal-open{
+    overflow: hidden!important;
+}
+
+table th{
+    padding:1rem
+}
+
+table tbody tr td{
+    padding:1rem
+} */
+
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template/simple-sidebar)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+/* 
+#wrapper {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+} */

@@ -226,12 +226,13 @@ import Multiselect from 'vue-multiselect';
 import StarRating from 'vue-star-rating';
 import { VueEditor } from "vue2-editor";
 import GlobalMix from "../../GlobalMix";
+import VueContentPlaceholders from 'vue-content-placeholders';
 
     export default{
         components: {
             Multiselect,
             StarRating,
-            VueEditor
+            VueEditor,
         },
         mixins:[GlobalMix],
         data(){
@@ -249,45 +250,36 @@ import GlobalMix from "../../GlobalMix";
                 modal:{
                     freelancer:false
                 },
-                form_error:{
-                    level:{
-                        msg:"Must not be empty",
-                        has_error:false
-                    },
-                    title:{
-                        msg:"Must not be empty",
-                        has_error:false
-                    },
-                    description:{
-                        msg:"Must not be empty",
-                        has_error:false
-                    },
-                    vacant:{
-                        msg:"Must not be empty",
-                        has_error:false
-                    },
-                    salary:{
-                        msg:"Must not be empty",
-                        has_error:false
-                    },
-                    req:{
-                        msg:"Must not be empty",
-                        has_error:false
-                    },
-                    value:{
-                        msg:"Must not be empty",
-                        has_error:false
-                    }
-                },
-                step:1,
-                value: [],
-                options: [
-                    { name: 'Vue.js', code: 'vu' ,rating:0},
-                    { name: 'Javascript', code: 'js' ,rating:0},
-                    { name: 'Open Source', code: 'os' ,rating:0},
-                    { name: 'Laravel', code: 'Lar' ,rating:0},
-                    { name: 'Web Development', code: 'Web Dev',rating:0 }
-                ],
+                // form_error:{
+                //     level:{
+                //         msg:"Must not be empty",
+                //         has_error:false
+                //     },
+                //     title:{
+                //         msg:"Must not be empty",
+                //         has_error:false
+                //     },
+                //     description:{
+                //         msg:"Must not be empty",
+                //         has_error:false
+                //     },
+                //     vacant:{
+                //         msg:"Must not be empty",
+                //         has_error:false
+                //     },
+                //     salary:{
+                //         msg:"Must not be empty",
+                //         has_error:false
+                //     },
+                //     req:{
+                //         msg:"Must not be empty",
+                //         has_error:false
+                //     },
+                //     value:{
+                //         msg:"Must not be empty",
+                //         has_error:false
+                //     }
+                // },
                 freelancer:{
                     table:null,
                     modalData:[],
@@ -303,11 +295,13 @@ import GlobalMix from "../../GlobalMix";
                 hired:{
                     freelancer:[],
                     coordinator:[]
-                }
+                },
+                is_loading:false
             }
         },
         mounted:function(){
-            this.test();
+            // this.test();
+            // alert(this.testdata);
         },
         methods:{
             hire(id,who){
@@ -390,13 +384,20 @@ import GlobalMix from "../../GlobalMix";
                 formdata.append('form',JSON.stringify(this.form));
                 formdata.append('skill',JSON.stringify(this.form.value));
                 if (this.is_freelance) {
-                    alert("Freelancer");
+                    alert("saved as freelancer");
                     formdata.append('is_freelancer',true);
                     formdata.append('freelancer',JSON.stringify(this.hired.freelancer));
                 }else{
-                    alert("Coordinator");
+                    alert("saved as coordinator");
                     formdata.append('is_freelancer',false);
                     formdata.append('coordinator',JSON.stringify(this.hired.coordinator));
+                }
+
+                var to_validate={
+                    level:{
+                        msg:"",
+                        require:true,
+                    }
                 }
 
                 axios.post('/employer/createJob',formdata)

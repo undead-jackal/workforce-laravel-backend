@@ -27,7 +27,6 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 Vue.use(BootstrapVue)
 Vue.use(VueToast);
 
-
 Vue.component('login', require('./components/Login.vue').default);
 Vue.component('register-freelancer', require('./components/registerFreelancer.vue').default);
 Vue.component('register-employer', require('./components/registerEmployer.vue').default);

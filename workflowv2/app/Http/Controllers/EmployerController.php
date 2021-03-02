@@ -21,7 +21,16 @@ class EmployerController extends Controller
         return view('employer.createJob');
     }
 
+    public function roomView(Request $request){
+        $id=$request->input('id');
+        return view('employer.room')->with('job',$id);
+    }
+
     public function jobList(Request $request){
+        return view('employer.jobPost')->with('jobs',$this->getJobList());
+    }
+
+    public function getJobList(){
         $params = array(
             "table" => 'job',
             "select" => array(
@@ -35,7 +44,7 @@ class EmployerController extends Controller
                 array('user_employer', 'job.owner', '=', 'user_employer.credential')
             )
         );
-        return view('employer.jobPost')->with('jobs', DataModel::getData($params));
+        return DataModel::getData($params);
     }
 
     public function getJobDetail(Request $request){
@@ -228,10 +237,7 @@ class EmployerController extends Controller
         ]);
     }
 
-    public function roomView(Request $request){
-        $id=$request->input('id');
-        return view('employer.room')->with('job',$id);
-    }
+
 
     public function interviews($id)
     {
@@ -266,16 +272,16 @@ class EmployerController extends Controller
             ['status' => 5]
         );
         $key = uniqid('interview-1311998',TRUE);
-        $solo_chat_data = array(
-            'name'=>$request->input('title'),
-            'job'=>$request->input('job'),
-            'application' => $request->input('application'),
-            'user'=>$request->input('user'),
-            'key'=>$key,
-        );
 
-        $addsolo = DB::table('solo_chat')
-                ->insert($solo_chat_data);
+        $addsolo = DataModel::insertData('solo_chat',
+            array(
+                'name'=>$request->input('title'),
+                'job'=>$request->input('job'),
+                'application' => $request->input('application'),
+                'user'=>$request->input('user'),
+                'key'=>$key,
+            )
+        );
 
         return response()->json([
             'status' => true,

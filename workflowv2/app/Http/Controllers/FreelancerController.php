@@ -17,6 +17,20 @@ class FreelancerController extends Controller
         return view('freelancer.fetchjobs')->with('jobs',$this->fetchJobs());
     }
 
+    public function jobInvitesView(){
+        return view('freelancer.jobInvites')->with('invites',$this->getInvites());
+    }
+
+    public function myJobsView(Request $request){
+        return view('freelancer.myjobs')->with('data', $this->getMyJobs());
+    }
+
+    public function messenger(Request $request){
+        return view('freelancer.chatRoom')->with('group',$this->groupChats());
+    }
+
+    // POST
+
     public function fetchJobs(){
         $jobs = DB::table('job')
         ->select('job.*','user_employer.fname','user_employer.lname','user_employer.company')
@@ -30,10 +44,6 @@ class FreelancerController extends Controller
         ->join('user_employer','job.owner','=','user_employer.credential')
         ->get();
         return $jobs;
-    }
-
-    public function jobInvitesView(){
-        return view('freelancer.jobInvites')->with('invites',$this->getInvites());
     }
 
     public function getMyJobs(){
@@ -52,10 +62,6 @@ class FreelancerController extends Controller
         return DataModel::getData($params);
     }
 
-    public function myJobsView(Request $request){
-        return view('freelancer.myjobs')->with('data', $this->getMyJobs());
-    }
-
     public function acceptInvite(Request $request){
         $updated_invite = DB::table('application')
         ->updateOrInsert(
@@ -69,10 +75,14 @@ class FreelancerController extends Controller
     }
 
     public function getInterviewSched(Request $request){
-        $schedule = DB::table('interview')
-                ->where('person_id','=',AUTH::user()->id)
-                ->where('job_id','=',$request->input('job'))
-                ->get();
+        $params = array(
+            'table' => 'interview',
+            'where' => array(
+                array('person_id','=',AUTH::user()->id),
+                array('job_id','=',$request->input('job'))
+            ),
+        );
+        $schedule = DataModel::getData($params);
         return response()->json([
                     'date' => $schedule[0]->date,
                     'reminder' => $schedule[0]->reminder
@@ -93,17 +103,22 @@ class FreelancerController extends Controller
     }
 
     public function getInvites(){
-        $invites = DB::table('application')
-        ->select('application.id as application_id', 'application.status as application_stat', 'application.applicant','application.applicant_type','application.type','application.inviter','application.inviter_type','job.title','job.vacant','job.description','job.id as job_id','job.salary','user_employer.fname','user_employer.lname')
-        ->join('job', 'application.job', '=', 'job.id')
-        ->join('user_employer', 'job.owner', '=', 'user_employer.credential')
-        ->where('job.status', '=', 0)
-        ->where('application.status', '!=', 10)
-
-        ->where('application.applicant', '=', AUTH::user()->id)
-        ->where('application.applicant_type', '=', AUTH::user()->type)
-        ->get();
-        return $invites;
+        $params = array(
+            "table" => 'application',
+            "select" => array('application.id as application_id', 'application.status as application_stat', 'application.applicant','application.applicant_type','application.type','application.inviter','application.inviter_type','job.title','job.vacant','job.description','job.id as job_id','job.salary','user_employer.fname','user_employer.lname'),
+            "where" =>array(
+                array('job.status', '=', 0),
+                array('application.status', '!=', 10),
+                array('application.applicant', '=', AUTH::user()->id),
+                array('application.applicant_type', '=', AUTH::user()->type),
+            ),
+            
+            "join" => array(
+                array('job', 'application.job', '=', 'job.id'),
+                array('user_employer', 'job.owner', '=', 'user_employer.credential')
+            )
+        );
+        return DataModel::getData($params);
     }
 
 
@@ -131,25 +146,20 @@ class FreelancerController extends Controller
     }
 
     public function submitProposal(Request $request){
-        $data = array(
-            "type" => 1,
-            "proposal" => $request->input('proposal'), 
-            "job" => $request->input('job'),
-            "applicant" => AUTH::user()->id,
-            "applicant_type" => AUTH::user()->type,
-            "status" => 2,
-
+        $insert = DataModel::insertData('application',
+            array(
+                "type" => 1,
+                "proposal" => $request->input('proposal'), 
+                "job" => $request->input('job'),
+                "applicant" => AUTH::user()->id,
+                "applicant_type" => AUTH::user()->type,
+                "status" => 2,
+            )
         );
-        $insert = DB::table('application')
-        ->insert($data);
         return response()->json([
             'status' => $insert,
             'new_jobs' => $this->fetchJobs()
         ]);
-    }
-
-    public function messenger(Request $request){
-        return view('freelancer.chatRoom')->with('group',$this->groupChats());
     }
 
     public function groupChats(){
@@ -168,19 +178,17 @@ class FreelancerController extends Controller
     }
 
     public function recordChats(Request $request){
-        $chat = array(
-            'group_key' => $request->input('key'),
-            'user' => AUTH::user()->id,
-            'message' => $request->input('message'),
-            'type' => AUTH::user()->type
-
+        $chi = DataModel::insertData('chat',
+            array(
+                'group_key' => $request->input('key'),
+                'user' => AUTH::user()->id,
+                'message' => $request->input('message'),
+                'type' => AUTH::user()->type
+            )
         );
-        $chi = DB::table('chat')
-            ->insert($chat);
-
-            return response()->json([
-                'status' => $chi,
-            ]);
+        return response()->json([
+            'status' => $chi,
+        ]);
     }
 
     public function getChats(Request $request){

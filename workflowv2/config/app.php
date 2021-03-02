@@ -234,7 +234,6 @@ return [
         // custom helper
         'DataModel' => App\Helper\DataModel::class
 
-
     ],
 
 ];

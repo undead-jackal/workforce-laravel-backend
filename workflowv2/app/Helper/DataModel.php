@@ -29,4 +29,21 @@ class DataModel{
         
     }
 
+    public static function insertData($table, $data, $toSql = false){
+        return DB::table($table)
+            ->insertGetId($data);
+    }
+
+    // public static function update($table, $data, $toSql = false){
+    //     return DB::table($table)
+    //     ->updateOrInsert(
+    //         ['user' => $application->applicant,'job' =>$application->job],
+    //         ['status' => 3]
+    //     );
+    // }
+    // public static function insertData($table, $data, $toSql = false){
+    //     return DB::table($table)
+    // }
+    
+
 }

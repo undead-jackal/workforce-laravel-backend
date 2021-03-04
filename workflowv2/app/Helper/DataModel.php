@@ -4,6 +4,8 @@ namespace App\Helper;
 use Illuminate\Support\Facades\DB;
 
 class DataModel{
+
+    // use one line to save space DataModel::getData(array())
     public static function getData($params = array(), $toSql = false){
         $query = DB::table($params['table']);
         if (array_key_exists('select',$params)) {
@@ -28,7 +30,7 @@ class DataModel{
         }
         
     }
-
+    // use one line to save space DataModel::insertData("sampletable",array())
     public static function insertData($table, $data, $toSql = false){
         return DB::table($table)
             ->insertGetId($data);

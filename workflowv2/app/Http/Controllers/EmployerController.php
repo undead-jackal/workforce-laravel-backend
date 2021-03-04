@@ -30,8 +30,12 @@ class EmployerController extends Controller
         return view('employer.jobPost')->with('jobs',$this->getJobList());
     }
 
+    public function messenger(Request $request){
+        return view('employer.chatRoom')->with('group',$this->groupChats());
+    }
+
     public function getJobList(){
-        $params = array(
+        return DataModel::getData(array(
             "table" => 'job',
             "select" => array(
                 'job.*','user_employer.fname','user_employer.lname','user_employer.company',
@@ -43,70 +47,65 @@ class EmployerController extends Controller
             "join" => array(
                 array('user_employer', 'job.owner', '=', 'user_employer.credential')
             )
-        );
-        return DataModel::getData($params);
+        ));
     }
 
     public function getJobDetail(Request $request){
         $id = $request->input('job_id');
-        $params = array(
-            "table" => 'job',
-            "select" => array(
-                'job.*','user_employer.fname','user_employer.lname','user_employer.company',
-                DB::raw("(select count(id) from proposal where job = job.id and status = 0) as proposal_applicants"),
-                DB::raw("(select count(id) from invite where job = job.id and status = 1) as invite_applicants")
-            ),
-            "where" =>array(
-                array("job.id", '=',$id),
-            ),
-            "join" => array(
-                array('user_employer', 'job.owner', '=', 'user_employer.credential')
-            )
-        );
         return response()->json([
             'status' => true,
-            "job" => DataModel::getData($params)[0],
+            "job" => DataModel::getData(array(
+                "table" => 'job',
+                "select" => array(
+                    'job.*','user_employer.fname','user_employer.lname','user_employer.company',
+                    DB::raw("(select count(id) from proposal where job = job.id and status = 0) as proposal_applicants"),
+                    DB::raw("(select count(id) from invite where job = job.id and status = 1) as invite_applicants")
+                ),
+                "where" =>array(
+                    array("job.id", '=',$id),
+                ),
+                "join" => array(
+                    array('user_employer', 'job.owner', '=', 'user_employer.credential')
+                )
+            ))[0],
         ]);
     }
 
     public function getApplicants(Request $request){
         $id = $request->input('job_id');
-        $params = array(
-            "table" => 'application',
-            "select" => array('application.id as app_id','application.status','user_freelancer.fname','user_freelancer.lname','user_freelancer.id'),
-            "where" =>array(
-                array("application.job", '=',$id),
-                array("application.status", '<',3),
-            ),
-            
-            "join" => array(
-                array('user_freelancer', 'application.applicant', '=', 'user_freelancer.credential')
-            )
-        );
         return response()->json([
             'status' => true,
-            "applicant" => DataModel::getData($params),
+            "applicant" => DataModel::getData(array(
+                "table" => 'application',
+                "select" => array('application.id as app_id','application.status','user_freelancer.fname','user_freelancer.lname','user_freelancer.id'),
+                "where" =>array(
+                    array("application.job", '=',$id),
+                    array("application.status", '<',3),
+                ),
+                
+                "join" => array(
+                    array('user_freelancer', 'application.applicant', '=', 'user_freelancer.credential')
+                )
+            )),
         ]);
     }
 
     public function getEmployee(Request $request){
         $id = $request->input('job_id');
-        $params = array(
-            "table" => 'employee',
-            "select" => array('employee.id as employee_id','user_freelancer.fname','user_freelancer.lname','user_freelancer.id', 'user_freelancer.level'),
-            "where" =>array(
-                array("employee.job", '=',$id),
-            ),
-            "join" => array(
-                array('user_freelancer', 'employee.employee', '=', 'user_freelancer.credential')
-            )
-        );
         return response()->json([
             'status' => true,
-            "employee" => DataModel::getData($params),
+            "employee" => DataModel::getData(array(
+                "table" => 'employee',
+                "select" => array('employee.id as employee_id','user_freelancer.fname','user_freelancer.lname','user_freelancer.id', 'user_freelancer.level'),
+                "where" =>array(
+                    array("employee.job", '=',$id),
+                ),
+                "join" => array(
+                    array('user_freelancer', 'employee.employee', '=', 'user_freelancer.credential')
+                )
+            )),
         ]);
     }
-
 
     // kani kay mag create nig job
     public function createJob(Request $request){
@@ -239,9 +238,8 @@ class EmployerController extends Controller
 
 
 
-    public function interviews($id)
-    {
-        $params = array(
+    public function interviews($id){
+        return DataModel::getData(array(
             'table' => 'interview',
             'select'=>array('interview.id','interview.applicants','interview.sched','user_freelancer.fname','user_freelancer.lname', 'application.status','application.job','application.applicant','application.applicant_type','job.title'),
             'where' => array(
@@ -254,9 +252,7 @@ class EmployerController extends Controller
                 array('job', 'application.job', '=', 'job.id')
 
             )
-        );
-
-        return DataModel::getData($params);
+        ));
     }
 
     public function getInterviews(Request $request){
@@ -348,12 +344,8 @@ class EmployerController extends Controller
             ->insertGetId($data);
     }
 
-    public function messenger(Request $request){
-        return view('employer.chatRoom')->with('group',$this->groupChats());
-    }
-
     public function groupChats(){
-        $params = array(
+        return DataModel::getData(array(
             'table' => 'group_chat',
             'select'=>array('group_chat.id','group_chat.name','group_chat.key'),
             'where' => array(
@@ -362,43 +354,40 @@ class EmployerController extends Controller
             "join" => array(
                 array('job', 'group_chat.job', '=', 'job.id')
             )
-        );
-        return DataModel::getData($params);
+        ));
     }
 
     public function floaterGetGroup(Request $request){
-        $params = array(
-            'table' => 'group_chat',
-            'select'=>array('group_chat.id','group_chat.name','group_chat.job','group_chat.key','group_chat.status','user_employer.fname','user_employer.lname'),
-            'where' => array(
-                array('job.owner','=',AUTH::user()->id)
-            ),
-            "join" => array(
-                array('job', 'group_chat.job', '=', 'job.id'),
-                array('employee', 'group_chat.job', '=', 'employee.job'),
-                array('user_employer', 'job.owner', '=', 'user_employer.credential'),
-            )
-        );
         return response()->json([
-            'group' =>  DataModel::getData($params),
+            'group' =>  DataModel::getData(array(
+                'table' => 'group_chat',
+                'select'=>array('group_chat.id','group_chat.name','group_chat.job','group_chat.key','group_chat.status','user_employer.fname','user_employer.lname'),
+                'where' => array(
+                    array('job.owner','=',AUTH::user()->id)
+                ),
+                "join" => array(
+                    array('job', 'group_chat.job', '=', 'job.id'),
+                    array('employee', 'group_chat.job', '=', 'employee.job'),
+                    array('user_employer', 'job.owner', '=', 'user_employer.credential'),
+                )
+            )),
         ]);
     }
 
     public function floaterGetSolo(Request $request){
-        $params = array(
-            'table' => 'solo_chat',
-            'select'=>array('solo_chat.id','solo_chat.name','solo_chat.job','solo_chat.application','solo_chat.status','solo_chat.key','user_employer.fname','user_employer.lname'),
-            'where' => array(
-                array('job.owner','=',AUTH::user()->id),
-                array('solo_chat.status','!=',3)
-            ),
-            "join" => array(
-                array('job', 'solo_chat.job', '=', 'job.id'),
-                array('user_employer', 'job.owner', '=', 'user_employer.credential'),
-            )
-        );
         return response()->json([
-            'solo' =>  DataModel::getData($params),
+            'solo' =>  DataModel::getData(array(
+                'table' => 'solo_chat',
+                'select'=>array('solo_chat.id','solo_chat.name','solo_chat.job','solo_chat.application','solo_chat.status','solo_chat.key','user_employer.fname','user_employer.lname'),
+                'where' => array(
+                    array('job.owner','=',AUTH::user()->id),
+                    array('solo_chat.status','!=',3)
+                ),
+                "join" => array(
+                    array('job', 'solo_chat.job', '=', 'job.id'),
+                    array('user_employer', 'job.owner', '=', 'user_employer.credential'),
+                )
+            )),
         ]);
     }
 
@@ -417,24 +406,23 @@ class EmployerController extends Controller
     }
 
     public function getChats(Request $request){
-        $params = array(
-            'table' => 'chat',
-            'select'=>array(
-                'id','user','message',
-                DB::raw("(select fname from user_freelancer where credential = chat.user) as fname"),
-                DB::raw("(select lname from user_freelancer where credential = chat.user) as lname"),
-                DB::raw("(select fname from user_employer where credential = chat.user) as efname"),
-                DB::raw("(select lname from user_employer where credential = chat.user) as elname"),
-                DB::raw("(select fname from user_coordinator where credential = chat.user) as cfname"),
-                DB::raw("(select lname from user_coordinator where credential = chat.user) as clname"),
-                DB::raw("(select type from credentials where id = chat.user) as type")
-            ),
-            'where' => array(
-                array('group_key','=',$request->input('key'))
-            ),
-        );
         return response()->json([
-            'chats' =>  DataModel::getData($params),
+            'chats' =>  DataModel::getData(array(
+                'table' => 'chat',
+                'select'=>array(
+                    'id','user','message',
+                    DB::raw("(select fname from user_freelancer where credential = chat.user) as fname"),
+                    DB::raw("(select lname from user_freelancer where credential = chat.user) as lname"),
+                    DB::raw("(select fname from user_employer where credential = chat.user) as efname"),
+                    DB::raw("(select lname from user_employer where credential = chat.user) as elname"),
+                    DB::raw("(select fname from user_coordinator where credential = chat.user) as cfname"),
+                    DB::raw("(select lname from user_coordinator where credential = chat.user) as clname"),
+                    DB::raw("(select type from credentials where id = chat.user) as type")
+                ),
+                'where' => array(
+                    array('group_key','=',$request->input('key'))
+                ),
+            )),
         ]);
     }
     

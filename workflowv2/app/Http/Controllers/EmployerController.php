@@ -236,8 +236,6 @@ class EmployerController extends Controller
         ]);
     }
 
-
-
     public function interviews($id){
         return DataModel::getData(array(
             'table' => 'interview',
@@ -250,7 +248,6 @@ class EmployerController extends Controller
                 array('application', 'interview.applicants', '=', 'application.id'),
                 array('user_freelancer', 'application.applicant', '=', 'user_freelancer.credential'),
                 array('job', 'application.job', '=', 'job.id')
-
             )
         ));
     }

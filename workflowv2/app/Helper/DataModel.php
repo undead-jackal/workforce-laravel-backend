@@ -47,5 +47,17 @@ class DataModel{
     //     return DB::table($table)
     // }
     
-
+    public static function getGroupChats($id){
+        return DataModel::getData(array(
+            'table' => 'group_chat',
+            'select'=>array('group_chat.id','group_chat.name','group_chat.key'),
+            'where' => array(
+                array('application.applicant','=',$id)
+            ),
+            "join" => array(
+                array('job', 'group_chat.job', '=', 'job.id'),
+                array('application', 'group_chat.job', '=', 'application.job')
+            )
+        ));
+    }
 }

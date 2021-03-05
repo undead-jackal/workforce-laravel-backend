@@ -160,17 +160,7 @@ class FreelancerController extends Controller
     }
 
     public function groupChats(){
-        return DataModel::getData(array(
-            'table' => 'group_chat',
-            'select'=>array('group_chat.id','group_chat.name','group_chat.key'),
-            'where' => array(
-                array('application.applicant','=',AUTH::user()->id)
-            ),
-            "join" => array(
-                array('job', 'group_chat.job', '=', 'job.id'),
-                array('application', 'group_chat.job', '=', 'application.job')
-            )
-        ));
+        return DataModel::getGroupChats(AUTH::user()->id);
     }
 
     public function recordChats(Request $request){

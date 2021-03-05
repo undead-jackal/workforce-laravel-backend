@@ -342,16 +342,8 @@ class EmployerController extends Controller
     }
 
     public function groupChats(){
-        return DataModel::getData(array(
-            'table' => 'group_chat',
-            'select'=>array('group_chat.id','group_chat.name','group_chat.key'),
-            'where' => array(
-                array('job.owner','=',AUTH::user()->id)
-            ),
-            "join" => array(
-                array('job', 'group_chat.job', '=', 'job.id')
-            )
-        ));
+        return DataModel::getGroupChats(AUTH::user()->id);
+
     }
 
     public function floaterGetGroup(Request $request){

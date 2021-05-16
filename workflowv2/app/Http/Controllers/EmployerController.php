@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 namespace App\Http\Controllers;
 use App\Helper\DataModel;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class EmployerController extends Controller
 {
-    
+
     // kani nga function is mo display ug DASHBOARD for kani nga user
     public function index(){
         return view('employer.index');
@@ -82,7 +82,7 @@ class EmployerController extends Controller
                     array("application.job", '=',$id),
                     array("application.status", '<',3),
                 ),
-                
+
                 "join" => array(
                     array('user_freelancer', 'application.applicant', '=', 'user_freelancer.credential')
                 )
@@ -107,7 +107,6 @@ class EmployerController extends Controller
         ]);
     }
 
-    // kani kay mag create nig job
     public function createJob(Request $request){
         $form = json_decode($request->input('form'));
         $data_job = array(
@@ -123,12 +122,9 @@ class EmployerController extends Controller
         );
         $jobId = DB::table('job')
             ->insertGetId($data_job);
-
-        // Mao ni mohatag invite sa taga freelancer or taga coordinator 0=freelance, 1=coordinator,2=employer
-        // kani if freelancer mga freelancer ra iya tagaan invite ang else sa mga coordinator nana
         if ($request->input('is_freelancer') === 'true') {
             $freelancers = json_decode($request->input('freelancer'));
-            for ($i=0; $i < count($freelancers) ; $i++) { 
+            for ($i=0; $i < count($freelancers) ; $i++) {
                 $data_invite = array(
                     'applicant' =>$freelancers[$i],
                     'applicant_type' => 0,
@@ -142,7 +138,7 @@ class EmployerController extends Controller
             }
         }else{
             $coordinator = json_decode($request->input('coordinator'));
-            for ($i=0; $i < count($coordinator) ; $i++) { 
+            for ($i=0; $i < count($coordinator) ; $i++) {
                 $data_invite = array(
                     'applicant' =>$coordinator[$i],
                     'applicant_type' => 1,
@@ -160,10 +156,7 @@ class EmployerController extends Controller
         ]);
 
     }
-    /*
-        kani kay ge gamit ni sa :
-        1) Create JOb nga form
-    */
+
     public function getAllFreelancers(Request $request){
         $freelancers = DB::table('user_freelancer')
             ->where('level', '>=', $request->input('level'))
@@ -171,10 +164,10 @@ class EmployerController extends Controller
             ->get();
         $static_skill = json_decode($request->input('skill_needed'));
         $result = array();
-        foreach ($freelancers as $key){ 
+        foreach ($freelancers as $key){
             $skills_f = json_decode($key->skills);
-            for ($i=0; $i < count($static_skill); $i++) { 
-                for ($j=0; $j < count($skills_f); $j++) { 
+            for ($i=0; $i < count($static_skill); $i++) {
+                for ($j=0; $j < count($skills_f); $j++) {
                     if ($static_skill[$i]->name == $skills_f[$j]->name && $static_skill[$i]->rating <= $skills_f[$j]->rating) {
                         array_push($result, $key);
                     }
@@ -302,8 +295,6 @@ class EmployerController extends Controller
         );
 
         $application = DataModel::getData($params_app)[0];
-        // print_r($application);
-        // die();
         $updated= DB::table('solo_chat')
         ->updateOrInsert(
             ['user' => $application->applicant,'job' =>$application->job],
@@ -414,6 +405,5 @@ class EmployerController extends Controller
             )),
         ]);
     }
-    
-}
 
+}

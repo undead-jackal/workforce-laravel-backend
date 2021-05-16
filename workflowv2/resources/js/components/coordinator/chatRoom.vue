@@ -137,14 +137,6 @@ export default {
                         .catch(function (error) {
                             console.log(error)
                         });
-                // axios.post('/coordinator/floaterGetGroup')
-                //         .then(function (response) {
-                //             self.group = response.data.group;
-                //         })
-                //         .catch(function (error) {
-                //             console.log(error)
-                //         }); 
-                // ================
                 
             })
         let firebase_cc = db.database().ref("workforce/invite_not").orderByKey().limitToLast(1);

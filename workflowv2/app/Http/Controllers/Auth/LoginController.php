@@ -44,17 +44,17 @@ class LoginController extends Controller
 
     public function handleLogin(Request $request)
     {
-        if(Auth::attempt(array('username' => $request->username, 'password' => $request->password, 'type' => $request->type))){
+        if(Auth::attempt(array('username' => $request->username['val'], 'password' => $request->password['val'], 'type' => $request->type['val']))){
             $user= Auth::user();
             $username = $user->name;
             return response()->json([
                 'status'  => true,
-                'user' => $user->type,
+                'user' => $request->username['val'],
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'user'   => $request->username
+                'user'   => []
             ]);
         }
     }

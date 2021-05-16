@@ -198,7 +198,7 @@ class FreelancerController extends Controller
         ]);
     }
 
-    public function floaterGetGroup(Request $request){
+    public function floaterGetGroup(Request $request){  
         return response()->json([
             'group' =>  DataModel::getData(array(
                 'table' => 'group_chat',
@@ -231,5 +231,4 @@ class FreelancerController extends Controller
             )),
         ]);
     }
-
 }

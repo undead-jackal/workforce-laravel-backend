@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddData2ToSoloChatTable extends Migration
+class AddDataToSoloChatTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,6 +14,7 @@ class AddData2ToSoloChatTable extends Migration
     public function up()
     {
         Schema::table('solo_chat', function (Blueprint $table) {
+            $table->string('title');
             $table->integer('application');
         });
     }

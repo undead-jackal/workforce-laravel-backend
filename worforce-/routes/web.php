@@ -17,4 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
+Route::get('employer', [App\Http\Controllers\EmployerController::class, 'jobList_view']);
+Route::get('employer/manage', [App\Http\Controllers\EmployerController::class, 'manage_view']);
+Route::get('employer/manage/applicants', [App\Http\Controllers\EmployerController::class,'applicant_view']);
+Route::get('employer/profile', [App\Http\Controllers\EmployerController::class,'profile_view']);
+Route::get('employer/wallet', [App\Http\Controllers\EmployerController::class,'wallet_view']);
+Route::get('employer/login', [App\Http\Controllers\EmployerController::class,'login']);
+Route::get('employer/register', [App\Http\Controllers\EmployerController::class,'register']);

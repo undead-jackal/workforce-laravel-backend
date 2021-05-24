@@ -70,6 +70,23 @@ class AuthController extends Controller{
         return $update;
     }
 
+    /*
+        Register Function
+
+        * mo register sa user
+
+        Dawaton gkan sa front end:
+            username = string
+            password = string
+            role = integer
+            fname = string
+            lname = string
+        
+        Iyang E return
+            if success = status = boolean
+                        data = object
+    */
+
     public function register(Request $request){
         $data = array(
             "username" => $request->input('username'),
@@ -111,31 +128,69 @@ class AuthController extends Controller{
         }
     }
 
+    /* 
+        Record Chat function
 
-        public function recordChat(Request $request){
-            $chat = array(
-                'group_key' => $request->input('key'),
-                'user' => $request->input('id'),
-                'message' => $request->input('message')
-            );
-            $record = DataPayload::insertData('chat',$chat);
-            return response()->json([
-                'status' => $record,
-            ]);
-        }
+        * records chat to database
 
-        public function getListChats(Request $request){
-            return DataPayload::getData(array(
-                'table' => 'solo_chat',
-                'where' => array(
-                    array('application.applicant','=',$request->input('id'))
-                ),
-                "join" => array(
-                    array('job', 'solo_chat.job', '=', 'job.id'),
-                    array('application', 'solo_chat.job', '=', 'application.job')
-                )
-            ));
-        }
+        Dawaton gkan sa frontend
+            key = string
+            id = integer
+            message = string
+
+        Return record = object
+    */
+
+    public function recordChat(Request $request){
+        $chat = array(
+            'group_key' => $request->input('key'),
+            'user' => $request->input('id'),
+            'message' => $request->input('message')
+        );
+        $record = DataPayload::insertData('chat',$chat);
+        return response()->json([
+            'status' => $record,
+        ]);
+    }
+
+    /* 
+        Get Chat List function
+
+        * get chat from database to ui
+
+        Dawaton gkan sa frontend
+            id = integer
+
+        Return record = object
+    */
+
+    public function getListChats(Request $request){
+        return DataPayload::getData(array(
+            'table' => 'solo_chat',
+            'select'=>array('solo_chat.key','solo_chat.user','solo_chat.job','application.applicant','user_info.fname','user_info.lname','job.title'),
+            'where' => array(
+                array('application.applicant','=',$request->input('id')),
+                array('solo_chat.user','=',$request->input('id'))
+            ),
+            "join" => array(
+                array('job', 'solo_chat.job', '=', 'job.id'),
+                array('application', 'solo_chat.job', '=', 'application.job'),
+                array('user_info', 'application.applicant', '=', 'user_info.credential')
+            )
+        ));
+    }   
+    /* 
+        Upload Image function
+
+        * get chat from database to ui
+
+        Dawaton gkan sa frontend
+            id = integer
+            profielSet = stringified object
+            file = binary
+
+        Return record = object
+    */
 
     public function uploadImage(Request $request){
         $api = new Image4ioApi($this->apiKey, $this->apiSecret);
@@ -150,7 +205,6 @@ class AuthController extends Controller{
                 array('credential', $request->input('id'))
             ),
         );
-
         $profSet = json_decode($request->input('profileSet'));
         $profSet->profile = 1;
 
@@ -169,6 +223,18 @@ class AuthController extends Controller{
         ]);
     }
 
+    /* 
+        Get Chat function
+
+        * get chat from database to ui
+
+        Dawaton gkan sa frontend
+            id = integer
+            profielSet = stringified object
+            file = binary
+
+        Return record = object
+    */
 
     public function getChat(Request $request){
         return DataPayload::getData(array(
@@ -185,6 +251,18 @@ class AuthController extends Controller{
             )
         ));
     }
+
+    /* 
+        Get Profile function
+
+        * getting profile to display 
+
+        Dawaton gkan sa frontend
+            only_name = true
+            id = integer
+        Return status = boolean
+                data = object
+    */
 
     public function getProfile(Request $request){
         $select = array('*');
@@ -205,6 +283,20 @@ class AuthController extends Controller{
             'data' => $data[0]
         ]);
     }
+
+    /*
+        Login Function
+
+        * getting profile to display 
+
+        Dawaton gkan sa frontend
+            username = string
+            password = string
+
+        Return 
+            if count == 0 : status = boolean
+            if success : status = boolean, data = object
+    */
 
     public function login(Request $request){
         $username = $request->input('username');
@@ -241,6 +333,20 @@ class AuthController extends Controller{
             ]);
         }
     }
+    
+    /*
+        Login Function
+
+        * getting profile to display 
+
+        Dawaton gkan sa frontend
+            username = string
+            password = string
+
+        Return 
+            if count == 0 : status = boolean
+            if success : status = boolean, data = object
+    */
 
     public function checkSchedule(Request $request){
         $select= array('sched', 'interview.applicants');
@@ -278,7 +384,19 @@ class AuthController extends Controller{
         }
         return $dates;
     }
+    /*
+        User Setting
 
+        * update user setting such as manual modal 
+
+        Dawaton gkan sa frontend
+            user = integer
+            manaul = string
+            setting = string
+
+        Return integer
+    */
+    
     public function userSetting(Request $request){
         if($request->input('setting') == "manual"){
             $update = DataPayload::updateOrInsertData(
@@ -295,6 +413,18 @@ class AuthController extends Controller{
         }
     }
 
+    /*
+        Update Profile
+
+        * update user setting such as manual modal 
+
+        Dawaton gkan sa frontend
+            user = integer
+            manaul = string
+            setting = string
+
+        Return integer
+    */
     public function updateProfile(Request $request){
         $data = array(
             'fname' => $request->input('fname'),
@@ -306,7 +436,7 @@ class AuthController extends Controller{
             'sss' => $request->input('sss'),
             'philhealth' => $request->input('phi'),
             'tin' => $request->input('tin'),
-            'employement'=>$request->input('employment'),
+            'employment'=>$request->input('employment'),
             'education' =>$request->input('education'),
             'languages' =>$request->input('language'),
             'skills' =>$request->input('skills'),

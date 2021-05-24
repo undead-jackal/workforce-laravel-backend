@@ -1,0 +1,32 @@
+body{
+    margin: 0px;
+    background: var(--background);
+    width: 100%;
+}
+
+:root{
+    --background :#f1f7fd;
+    --dominant :#2577B5;
+    --accent:#1E669E;
+    --white:#fff;
+    --lightgray:#8D9498;
+    --darkgray:#595D60;
+    --hover:#efefef;
+    --acc1:#168AAD;
+    --acc2:#6BBABC;
+
+    --gradient1:linear-gradient(146deg, rgba(37,119,181,1) 0%, rgba(27,90,138,1) 87%);
+}
+
+.c-main{
+    padding:0rem;
+}
+
+.c-sidebar-nav-link i{
+    font-size: 1.5rem;
+}
+
+.c-sidebar{
+    color: var(--darkgray);
+    background-color: var(--dominant);
+}
